@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+        <label for="quantidade_de_monomios">Quantidade de Monomios</label>
+        <input id="quantidade_de_monomios" class="as" >    
+        <button onclick="createForm()" id="btn_quantidade_de_monomios">Enviar</button>
+    
+    <!-- <button onclick="addValues()">Adicionar Valores</button> -->
+</body>
+<script>
+
+    var count = 0;
+
+    let attributes = "";
+
+    function createForm(){
+        let quantidade_de_monomios = document.querySelector('#quantidade_de_monomios').value
+        console.log(quantidade_de_monomios)
+
+        const listaInputs = [];
+        
+        for(let i=1;i <= quantidade_de_monomios;i++){
+            let input = document.createElement('input')
+            input.setAttribute('class','monomio')
+            // input.setAttribute('type','number')
+            input.setAttribute('placeholder','Informe o ' + i + '° monomio')
+
+            let input2 = document.createElement('input')
+            input2.setAttribute('class','monomio')
+            // input.setAttribute('type','number')
+            input2.setAttribute('placeholder','Informe o expoente do' + i + '° monomio')
+            // input.setAttribute('class','monomio').
+            listaInputs.push(input);
+            listaInputs.push(input2);
+        }
+
+        let body = document.querySelector('body');
+
+        for(let i=0;i <= listaInputs.length;i++){
+            body.appendChild(listaInputs[i]);
+        }
+
+    }
+
+    function addValues(){
+        let newInput = document.createElement('input')
+        newInput.setAttribute('')
+    }
+
+</script>
+</html>
