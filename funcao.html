@@ -6,52 +6,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+<style>
+    html{
+        width: 100%;
+        height: 100%;
+        display: flex;
+    }
+    body{
+        box-sizing: border-box;
+    }
+
+    .inputs-monomio input{
+        width: 250px;
+    }
+
+</style>
 <body>
-    
-        <label for="quantidade_de_monomios">Quantidade de Monomios</label>
-        <input id="quantidade_de_monomios" class="as" >    
-        <button onclick="createForm()" id="btn_quantidade_de_monomios">Enviar</button>
+    <label for="quantidade_de_monomios">Quantidade de Monomios</label>
+    <input id="quantidade_de_monomios" type="number" >    
+    <button onclick="createForm()" id="btn_quantidade_de_monomios">Enviar</button>
+    <div style="display:flex;flex-flow: column;" class="inputs-monomio">
+    </div>
     
     <!-- <button onclick="addValues()">Adicionar Valores</button> -->
 </body>
 <script>
 
-    var count = 0;
-
-    let attributes = "";
-
     function createForm(){
         let quantidade_de_monomios = document.querySelector('#quantidade_de_monomios').value
-        console.log(quantidade_de_monomios)
-
-        const listaInputs = [];
+        const listaInputs = []
         
         for(let i=1;i <= quantidade_de_monomios;i++){
             let input = document.createElement('input')
-            input.setAttribute('class','monomio')
-            // input.setAttribute('type','number')
+            input.setAttribute('class','monomio-value')
             input.setAttribute('placeholder','Informe o ' + i + '° monomio')
-
-            let input2 = document.createElement('input')
-            input2.setAttribute('class','monomio')
-            // input.setAttribute('type','number')
-            input2.setAttribute('placeholder','Informe o expoente do' + i + '° monomio')
-            // input.setAttribute('class','monomio').
-            listaInputs.push(input);
-            listaInputs.push(input2);
+            let inputExp = document.createElement('input')
+            inputExp.setAttribute('class','monomio-exp')
+            inputExp.setAttribute('placeholder','Informe o expoente do ' + i + '° monomio')
+            listaInputs.push(input)
+            listaInputs.push(inputExp)
         }
-
-        let body = document.querySelector('body');
-
-        for(let i=0;i <= listaInputs.length;i++){
-            body.appendChild(listaInputs[i]);
+        let div = document.querySelector('.inputs-monomio')
+        for(let i=0;i < listaInputs.length;i++){
+            div.appendChild(listaInputs[i])
         }
-
+        let buttonSendValue = document.createElement('button')
+        buttonSendValue.setAttribute("value","Enviar")
+        buttonSendValue.setAttribute("onClick","calc()")
+        buttonSendValue.innerText = "Enviar"
+        div.appendChild(buttonSendValue)
     }
 
-    function addValues(){
-        let newInput = document.createElement('input')
-        newInput.setAttribute('')
+    function calc(){
+        const expInputs = document.querySelector('.inputs-monomio').getElementsByClassName('monomio-exp')
+        const monInputs = document.querySelector('.inputs-monomio').getElementsByClassName('monomio-value')
+        const result = [];
+        let sumOfAllValues = 0
+        let range = [-1000,1000]
+        let x = range[0]
+
+        while(x <= range[1]){
+            result[x] = []
+            for(let i=0;i < monInputs.length;i++){
+                result[x][i] = parseInt(Math.pow(x, expInputs[i].value) * monInputs[i].value)
+                sumOfAllValues += parseInt(result[i])
+            }
+            x++
+        }
+            
+        console.log(result)
+
+
     }
 
 </script>
