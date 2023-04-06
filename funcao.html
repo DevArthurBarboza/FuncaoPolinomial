@@ -24,6 +24,7 @@
 <body>
     <label for="quantidade_de_monomios">Quantidade de Monomios</label>
     <input id="quantidade_de_monomios" type="number" >    
+    <input id="epsilon" placeholder="Informe o épsilon">
     <button onclick="createForm()" id="btn_quantidade_de_monomios">Enviar</button>
     <div style="display:flex;flex-flow: column;" class="inputs-monomio">
     </div>
@@ -58,25 +59,42 @@
     }
 
     function calc(){
+        const epsilon = document.querySelector('#epsilon').value
         const expInputs = document.querySelector('.inputs-monomio').getElementsByClassName('monomio-exp')
         const monInputs = document.querySelector('.inputs-monomio').getElementsByClassName('monomio-value')
-        const result = [];
+        const result = []
         let sumOfAllValues = 0
-        let range = [-1000,1000]
-        let x = range[0]
+        let range = [-10,10]
+        let x = 0
 
-        while(x <= range[1]){
+        while(x <= range[1] - range[0]){
             result[x] = []
+
             for(let i=0;i < monInputs.length;i++){
-                result[x][i] = parseInt(Math.pow(x, expInputs[i].value) * monInputs[i].value)
-                sumOfAllValues += parseInt(result[i])
+                result[x][i] = parseFloat(Math.pow(x, expInputs[i].value) * monInputs[i].value)
+                sumOfAllValues += parseFloat(result[x][i])
             }
+            console.log(sumOfAllValues)
             x++
         }
             
         console.log(result)
+        
+        /**
+         * 
+         *  Plotly.com/javascript
+         * 
+         * 
+         */
+    }
 
 
+    function calcFunction(x,expInputs,monInputs){
+        let result = 0
+        for(let i=0;expInputs.length > 0;i++){
+            result += parseFloat(Math.pow(x,expInputs[i].value) * monInputs[i])
+        }
+        return result
     }
 
 </script>
