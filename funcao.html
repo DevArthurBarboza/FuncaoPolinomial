@@ -33,6 +33,14 @@
 </body>
 <script>
 
+
+const epsilon = document.querySelector('#epsilon').value;
+const expoentes = document.querySelector('.inputs-monomio').getElementsByClassName('monomio-exp');
+const monomios = document.querySelector('.inputs-monomio').getElementsByClassName('monomio-value');
+const range = [-10, 10];
+
+
+
     function createForm(){
         let quantidade_de_monomios = document.querySelector('#quantidade_de_monomios').value
         const listaInputs = []
@@ -59,42 +67,110 @@
     }
 
     function calc(){
-        const epsilon = document.querySelector('#epsilon').value
-        const expInputs = document.querySelector('.inputs-monomio').getElementsByClassName('monomio-exp')
-        const monInputs = document.querySelector('.inputs-monomio').getElementsByClassName('monomio-value')
-        const result = []
-        let sumOfAllValues = 0
+        const epsilon = parseFloat(document.querySelector('#epsilon').value)
+        const expoentes = document.querySelector('.inputs-monomio').getElementsByClassName('monomio-exp')
+        const monomios = document.querySelector('.inputs-monomio').getElementsByClassName('monomio-value')
+        let sumOfAllValues
         let range = [-10,10]
+        
+        let values = []
+        let location = []
+        let locals;
         let x = 0
+        let fx = range[0]
+        let prevValue = 0;
+        let prevIndex = 0;
+        let calc = 0;
+        let intervaloB = {"index": undefined ,"value" : undefined};
+        let intervaloA = {"index": undefined ,"value" : undefined};
 
         while(x <= range[1] - range[0]){
-            result[x] = []
+            sumOfAllValues = 0;
 
-            for(let i=0;i < monInputs.length;i++){
-                result[x][i] = parseFloat(Math.pow(x, expInputs[i].value) * monInputs[i].value)
-                sumOfAllValues += parseFloat(result[x][i])
+
+            for(let i=0;i < monomios.length;i++){
+                sumOfAllValues += parseFloat(Math.pow(fx, expoentes[i].value) * monomios[i].value)
             }
+
+            if(prevValue != 0){
+                calc = sumOfAllValues * prevValue
+            }
+         
+            let a = sumOfAllValues
+            let b = prevValue
+            if (calc < 0) {
+                let error = 1;
+
+                if(a > 0){
+                    intervaloB.value = a
+                    intervaloB.index = fx
+                    intervaloA.index = fx - 1
+                    intervaloA.value = b
+
+                }else{
+                    intervaloB.value = b
+                    intervaloA.value = a
+                    intervaloB.index = fx - 1
+                    intervaloA.index = fx
+
+                }
+                
+                let fm;
+                let m = 0;
+                while (error > epsilon) {
+                    fm = 0;
+                    if(m ==0){
+                        m = ((fx - 1) + fx ) / 2;
+                    }else{
+                        m = (intervaloA.index + intervaloB.index) / 2
+                    }
+
+                    // m = (intervaloA.value + intervaloB.value ) / 2;
+                    for (let i = 0; i < monomios.length; i++) {
+                        fm += parseFloat(Math.pow(m, expoentes[i].value) * monomios[i].value);
+                    }
+
+                    if(fm < 0){
+                        intervaloA.value = fm
+                        intervaloA.index = m
+                    }else{
+                        intervaloB.value = fm
+                        intervaloB.index = m
+                    }
+                    error = Math.abs(Math.abs(intervaloB.index) - Math.abs(intervaloA.index));
+                }
+
+                locals = [fx - 1,fx]
+                values.push(m)
+                location.push(locals)
+            }
+
+            prevValue = sumOfAllValues
+            prevIndex = fx
             console.log(sumOfAllValues)
             x++
+            fx++
         }
             
-        console.log(result)
+        let div = document.createElement('div');
         
-        /**
-         * 
-         *  Plotly.com/javascript
-         * 
-         * 
-         */
+        let text = document.createTextNode(appendValuesOnIndexes(location,values))
+        div.appendChild(text)
+        document.getElementsByTagName('body')[0].appendChild(div)
+        console.log(values)
+         
     }
 
 
-    function calcFunction(x,expInputs,monInputs){
-        let result = 0
-        for(let i=0;expInputs.length > 0;i++){
-            result += parseFloat(Math.pow(x,expInputs[i].value) * monInputs[i])
+    function appendValuesOnIndexes(location,values){
+        let output = '';
+        for(let i = 0; i < values.length;i++){
+            
+            output += "Raiz " + values[i] + " encontrada entre " + location[i][0] + " e " +  location[i][1]
+            output += "\n"
+
         }
-        return result
+        return output
     }
 
 </script>
